@@ -42,8 +42,12 @@ public class OneCalendarView extends LinearLayout {
     private TextView textViewMY;
     private TextView textViewD, textViewL, textViewM, textViewX, textViewJ, textViewV, textViewS;
 
-    public static final int SPANISH = 0, ENGLISH = 1;//si el calendario estara en español o ingles
-
+    //
+    // Languages of calendar
+    //
+    public static final int LANGUAGE_ENGLISH = 0;
+    public static final int LANGUAGE_SPANISH = 1;
+    public static final int LANGUAGE_RUSSIAN = 2;
 
     private int iday, imonth, iyear, month, year;
     //meses por defecto en español
@@ -72,7 +76,7 @@ public class OneCalendarView extends LinearLayout {
     int textColorMonthAndYear = Color.parseColor("#0099cc");
     int textColorSelectedDay = Color.parseColor("#000000");
     int backgroundColorSelectedDay = Color.parseColor("#d2d2d2");
-    int calendarLanguage = 0;
+    int calendarLanguage = LANGUAGE_ENGLISH;
 
     public OneCalendarView(Context context) {
         super(context);
@@ -135,6 +139,7 @@ public class OneCalendarView extends LinearLayout {
         } catch (NullPointerException e) {
         }
 
+        // Default language is English
         calendarLanguage = a.getInt(R.styleable.OneCalendarView_calendarLanguage, 0);
 
         a.recycle();
@@ -294,7 +299,7 @@ public class OneCalendarView extends LinearLayout {
      * este metodo configura el calendar a un mes y un año especifico
      *
      * @param month mes para el calendar
-     * @param year  año del mes
+     * @param year año del mes
      */
     public void setMonthYear(int month, int year) {
         showMonth(month, year);
@@ -302,12 +307,18 @@ public class OneCalendarView extends LinearLayout {
 
 
     /**
-     * permite cambiar el lenguaje de como se visualizan los meses y dias del calendario
+     * TODO: Made strings resources: ES, RU, EN
      *
-     * @param language SPANISH=0, ENGLISH=1;
+     * [EN] Change calendar's language (months, days)
+     * [ES] Permite cambiar el lenguaje de como se visualizan los meses y dias del calendario
+     *
+     * @param language new language of calendar
+     * @see OneCalendarView#LANGUAGE_ENGLISH
+     * @see OneCalendarView#LANGUAGE_RUSSIAN
+     * @see OneCalendarView#LANGUAGE_SPANISH
      */
     public void setLanguage(int language) {
-        if (language == 1) {//si el idioma es el ingles
+        if (language == LANGUAGE_ENGLISH) {//si el idioma es el ingles
             textViewL.setText("M");
             textViewM.setText("T");
             textViewX.setText("W");
@@ -328,9 +339,28 @@ public class OneCalendarView extends LinearLayout {
             octubre = "October";
             noviembre = "November";
             diciembre = "December";
+        } else if (language == LANGUAGE_RUSSIAN) {
+            textViewL.setText("П");
+            textViewM.setText("В");
+            textViewX.setText("С");
+            textViewJ.setText("Ч");
+            textViewV.setText("П");
+            textViewS.setText("С");
+            textViewD.setText("В");
 
-        } else {
-
+            enero = "Январь";
+            febrero = "Февраль";
+            marzo = "Март";
+            abril = "Апрель";
+            mayo = "Май";
+            junio = "Июнь";
+            julio = "Июль";
+            agosto = "Август";
+            septiembre = "Сентябрь";
+            octubre = "Октябрь";
+            noviembre = "Ноябрь";
+            diciembre = "Декабрь";
+        } else if (language == LANGUAGE_SPANISH) {
             textViewL.setText("L");
             textViewM.setText("M");
             textViewX.setText("X");
@@ -354,8 +384,6 @@ public class OneCalendarView extends LinearLayout {
         }
 
         textViewMY.setText(getStringMonth(month) + " " + year);
-
-
     }
 
     /**
@@ -507,7 +535,7 @@ public class OneCalendarView extends LinearLayout {
         /**
          * cuando se da click en un dia en el calendario mostrado
          *
-         * @param day      un Objeto de tipo Day del cual podemos llara a su metodo getDate() para recuperar una fecha
+         * @param day un Objeto de tipo Day del cual podemos llara a su metodo getDate() para recuperar una fecha
          * @param position posicion desde 0-41, que ocupa en el calendario actual
          */
         void dateOnClick(Day day, int position);
@@ -515,7 +543,7 @@ public class OneCalendarView extends LinearLayout {
         /**
          * cuando se da click prolongado en un dia en el calendario mostrado
          *
-         * @param day      un Objeto de tipo Day del cual podemos llara a su metodo getDate() para recuperar una fecha
+         * @param day un Objeto de tipo Day del cual podemos llara a su metodo getDate() para recuperar una fecha
          * @param position posicion desde 0-41, que ocupa en el calendario actual
          */
         void dateOnLongClick(Day day, int position);
@@ -529,6 +557,7 @@ public class OneCalendarView extends LinearLayout {
 
     /**
      * retorna el mes visible en el calendario
+     *
      * @return
      */
     public int getMonth() {
@@ -537,6 +566,7 @@ public class OneCalendarView extends LinearLayout {
 
     /**
      * retorna el año del mes visible en el calendario
+     *
      * @return
      */
     public int getYear() {

@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="OneCalendarView">
-        <attr name="mainBackgroundColor" format="color" />
-        <attr name="calendarBackgroundColor" format="color" />
-        <attr name="currentDayBackgroundColor" format="color" />
-        <attr name="backgroundColorDaysOfMonth" format="color" />
-        <attr name="backgroundColorDaysOfAnotherMonth" format="color" />
-        <attr name="textColorDaysOfMonth" format="color" />
-        <attr name="textColorDaysOfAnotherMonth" format="color" />
-        <attr name="textColorMonthAndYear" format="color" />
-        <attr name="textColorSelectedDay" format="color" />
-        <attr name="backgroundColorSelectedDay" format="color" />
-        <attr name="calendarLanguage" format="enum">
-            <enum name="ES" value="0" />
-            <enum name="EN" value="1" />
-        </attr>
-
-
-    </declare-styleable>
+	<declare-styleable name="OneCalendarView">
+		<attr name="mainBackgroundColor" format="color"/>
+		<attr name="calendarBackgroundColor" format="color"/>
+		<attr name="currentDayBackgroundColor" format="color"/>
+		<attr name="backgroundColorDaysOfMonth" format="color"/>
+		<attr name="backgroundColorDaysOfAnotherMonth" format="color"/>
+		<attr name="textColorDaysOfMonth" format="color"/>
+		<attr name="textColorDaysOfAnotherMonth" format="color"/>
+		<attr name="textColorMonthAndYear" format="color"/>
+		<attr name="textColorSelectedDay" format="color"/>
+		<attr name="backgroundColorSelectedDay" format="color"/>
+		<attr name="calendarLanguage" format="enum">
+			<enum name="EN" value="0"/>
+			<enum name="ES" value="1"/>
+			<enum name="RU" value="2"/>
+		</attr>
+	</declare-styleable>
 </resources>
