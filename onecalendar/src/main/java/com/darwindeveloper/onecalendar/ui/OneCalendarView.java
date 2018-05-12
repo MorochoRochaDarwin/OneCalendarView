@@ -131,7 +131,7 @@ public class OneCalendarView extends LinearLayout {
 
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.one_calendar_view, this, true);
+        inflater.inflate(R.layout.ui_one_calendar_view, this, true);
 
     }
 

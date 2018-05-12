@@ -37,7 +37,7 @@ public class AdapterCalendar extends RecyclerView.Adapter<ViewHolderDay> {
     @NonNull
     @Override
     public ViewHolderDay onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_calendar, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.adapter_calendar_day, parent, false);
         return new ViewHolderDay(view);
     }
 
