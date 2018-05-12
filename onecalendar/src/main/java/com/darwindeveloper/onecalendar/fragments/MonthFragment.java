@@ -45,7 +45,7 @@ public class MonthFragment extends Fragment implements CalendarAdapter.DayOnClic
     private RecyclerView recyclerViewDays;
     private CalendarAdapter calendarAdapter;
     private ArrayList<Day> days = new ArrayList<>();
-    private int imonth, iyear, currentDay, backgroundColorDays, backgroundColorDaysNV, backgroundColorCurrentDay, textColorDays, textColorDaysNV;
+    private int imonth, iyear, currentDay, backgroundColorDays, backgroundColorDaysNV, backgroundColorCurrentDay, textColorCurrentDayDay, textColorDays, textColorDaysNV;
 
 
     @Override
@@ -60,6 +60,7 @@ public class MonthFragment extends Fragment implements CalendarAdapter.DayOnClic
         backgroundColorDays = getArguments().getInt(BCDays);
         backgroundColorDaysNV = getArguments().getInt(BCDaysNV);
         backgroundColorCurrentDay = getArguments().getInt(BCCDay);
+        textColorCurrentDayDay = getArguments().getInt(TCSDAY);
         textColorDays = getArguments().getInt(TCDAYS);
         textColorDaysNV = getArguments().getInt(TCDAYSNV);
 
@@ -143,7 +144,7 @@ public class MonthFragment extends Fragment implements CalendarAdapter.DayOnClic
         for (int i = 1; i <= numberOfDaysMonthYear; i++) {
 
             if (this.iyear == year && this.imonth == month && this.currentDay == i) {
-                days.add(new Day(new Date(year, month, i), Color.parseColor("#FFFFFF"), backgroundColorCurrentDay));
+                days.add(new Day(new Date(year, month, i), textColorCurrentDayDay, backgroundColorCurrentDay));
             } else {
                 days.add(new Day(new Date(year, month, i), textColorDays, backgroundColorDays));
             }

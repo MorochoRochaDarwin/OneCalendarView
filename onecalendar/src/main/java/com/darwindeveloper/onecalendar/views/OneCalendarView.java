@@ -71,6 +71,7 @@ public class OneCalendarView extends LinearLayout {
     int textColorDaysOfAnotherMonth = Color.parseColor("#d2d2d2");
     int textColorMonthAndYear = Color.parseColor("#0099cc");
     int textColorSelectedDay = Color.parseColor("#000000");
+    int textColorCurrentDayDay = Color.parseColor("#000000");
     int backgroundColorSelectedDay = Color.parseColor("#d2d2d2");
     int calendarLanguage = 0;
 
@@ -127,6 +128,11 @@ public class OneCalendarView extends LinearLayout {
 
         try {
             textColorSelectedDay = Color.parseColor(a.getString(R.styleable.OneCalendarView_textColorSelectedDay));
+        } catch (NullPointerException e) {
+        }
+
+        try {
+            textColorCurrentDayDay = Color.parseColor(a.getString(R.styleable.OneCalendarView_textColorCurrentDayDay));
         } catch (NullPointerException e) {
         }
 
@@ -241,6 +247,7 @@ public class OneCalendarView extends LinearLayout {
         bundle.putInt(MonthFragment.BCDaysNV, backgroundColorDaysOfAnotherMonth);
         bundle.putInt(MonthFragment.TCDAYSNV, textColorDaysOfAnotherMonth);
         bundle.putInt(MonthFragment.TCSDAY, textColorSelectedDay);
+        bundle.putInt(MonthFragment.TCSDAY, textColorCurrentDayDay);
         bundle.putInt(MonthFragment.BCSDAY, backgroundColorSelectedDay);
         fragment.setArguments(bundle);
 
@@ -329,7 +336,29 @@ public class OneCalendarView extends LinearLayout {
             noviembre = "November";
             diciembre = "December";
 
-        } else {
+        } if (language == 2) {//si el idioma es el ingles
+        textViewL.setText("S");
+        textViewM.setText("T");
+        textViewX.setText("Q");
+        textViewJ.setText("Q");
+        textViewV.setText("S");
+        textViewS.setText("S");
+        textViewD.setText("D");
+
+        enero = "Janeiro";
+        febrero = "Fevereiro";
+        marzo = "Março";
+        abril = "Abril";
+        mayo = "Maio";
+        junio = "Junho";
+        julio = "Julho";
+        agosto = "Agosto";
+        septiembre = "Setembro";
+        octubre = "Outubro";
+        noviembre = "Novembro";
+        diciembre = "Dezembro";
+
+    } else {
 
             textViewL.setText("L");
             textViewM.setText("M");

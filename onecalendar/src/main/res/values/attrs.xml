@@ -10,10 +10,12 @@
         <attr name="textColorDaysOfAnotherMonth" format="color" />
         <attr name="textColorMonthAndYear" format="color" />
         <attr name="textColorSelectedDay" format="color" />
+        <attr name="textColorCurrentDayDay" format="color" />
         <attr name="backgroundColorSelectedDay" format="color" />
         <attr name="calendarLanguage" format="enum">
             <enum name="ES" value="0" />
             <enum name="EN" value="1" />
+            <enum name="PT_BR" value="2" />
         </attr>
 
 
