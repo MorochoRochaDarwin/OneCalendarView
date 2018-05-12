@@ -11,6 +11,7 @@ import android.widget.FrameLayout;
  */
 
 public class OneFrameLayout extends FrameLayout {
+
     public OneFrameLayout(Context context) {
         super(context);
     }
@@ -18,7 +19,6 @@ public class OneFrameLayout extends FrameLayout {
     public OneFrameLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
-
 
     private static final int mWidth = 500;
     private float mDisplacementX;
