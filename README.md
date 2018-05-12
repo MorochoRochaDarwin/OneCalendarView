@@ -117,7 +117,6 @@ Usted puede agregar varios atributos a la vista en sus layouts y crear diseños 
         app:backgroundColorDaysOfMonth="#53c0c0c1"
         app:backgroundColorSelectedDay="#d2d2d2"
         app:calendarBackgroundColor="@color/colorPrimary"
-        app:calendarLanguage="EN"
         app:currentDayBackgroundColor="#fad501"
         app:mainBackgroundColor="@color/colorPrimary"
         app:textColorDaysOfAnotherMonth="#fff"
@@ -133,7 +132,6 @@ La clase OneCalendarView dispone de los siguientes metodos para facilitar y redu
 | --- | --- |
 | void setMonthYear(int month, int year) | este metodo configura el OneCalendarView a un mes y un año especifico |
 | String getStringMonth(int numMonth) | retorna un mes como un string de pendiendo del idioma establecido en el OneCalendar (en java los meses inician en 0) |
-| void setLanguage(int language) | permite cambiar el lenguaje del OneCalendarView (SPANISH=0, ENGLISH=1) |
 | int getCurrentMonth() | retorna el mes actual |
 | int getCurrentYear() | retorna el año actual |
 | int getCurrentDayMonth() | retorna el dia del mes actual |
