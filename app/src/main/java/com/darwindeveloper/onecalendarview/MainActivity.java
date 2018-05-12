@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        calendarView = (OneCalendarView) findViewById(R.id.oneCalendar);
+        calendarView = findViewById(R.id.oneCalendar);
 
         //los metodos son obigatorios
         //calendarView.setOnCalendarChangeListener(params)

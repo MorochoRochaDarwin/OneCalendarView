@@ -12,6 +12,6 @@ public class ViewHolderDay extends RecyclerView.ViewHolder {
 
     public ViewHolderDay(View itemView) {
         super(itemView);
-        dia = (Button) itemView.findViewById(R.id.textViewDay);
+        dia = itemView.findViewById(R.id.textViewDay);
     }
 }

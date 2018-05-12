@@ -144,25 +144,23 @@ public class OneCalendarView extends LinearLayout {
         year = iyear;
 
         //inicializamos las vistas
-        mainContent = (LinearLayout) findViewById(R.id.mainContent);
-        fragment_container = (OneFrameLayout) findViewById(R.id.fragment_container);
-        buttonDown = (ImageButton) findViewById(R.id.imageButtonDown);
-        buttonUp = (ImageButton) findViewById(R.id.imageButtonUp);
-        textViewMY = (TextView) findViewById(R.id.textViewMY);
+        mainContent = findViewById(R.id.mainContent);
+        fragment_container = findViewById(R.id.fragment_container);
+        buttonDown = findViewById(R.id.imageButtonDown);
+        buttonUp = findViewById(R.id.imageButtonUp);
+        textViewMY = findViewById(R.id.textViewMY);
 
-        textViewD = (TextView) findViewById(R.id.textViewD);
-        textViewL = (TextView) findViewById(R.id.textViewL);
-        textViewM = (TextView) findViewById(R.id.textViewM);
-        textViewX = (TextView) findViewById(R.id.textViewX);
-        textViewJ = (TextView) findViewById(R.id.textViewJ);
-        textViewV = (TextView) findViewById(R.id.textViewV);
-        textViewS = (TextView) findViewById(R.id.textViewS);
-
+        textViewD = findViewById(R.id.textViewD);
+        textViewL = findViewById(R.id.textViewL);
+        textViewM = findViewById(R.id.textViewM);
+        textViewX = findViewById(R.id.textViewX);
+        textViewJ = findViewById(R.id.textViewJ);
+        textViewV = findViewById(R.id.textViewV);
+        textViewS = findViewById(R.id.textViewS);
 
         textViewMY.setTextColor(textColorMonthAndYear);
 
         setLanguage();
-
 
         fragment_container.setOnSwipeListener(new OneFrameLayout.OnSwipeListener() {
 

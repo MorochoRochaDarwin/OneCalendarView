@@ -70,7 +70,7 @@ public class MonthFragment extends Fragment implements OnClickDayListener {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_month, container, false);
-        recyclerViewDays = (RecyclerView) rootView.findViewById(R.id.recyclerView);
+        recyclerViewDays = rootView.findViewById(R.id.recyclerView);
         recyclerViewDays.setLayoutManager(new GridLayoutManager(context, 7));
 
 
