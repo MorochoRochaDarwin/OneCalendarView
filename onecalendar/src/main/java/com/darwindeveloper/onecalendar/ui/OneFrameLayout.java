@@ -12,6 +12,14 @@ import android.widget.FrameLayout;
 
 public class OneFrameLayout extends FrameLayout {
 
+    private static final int mWidth = 500;
+    private float mDisplacementX;
+    // private float mLastMoveX;
+    private float mDisplacementY;
+    private float mInitialTx;
+    private boolean mTracking;
+    private OnSwipeListener onSwipeListener;
+
     public OneFrameLayout(Context context) {
         super(context);
     }
@@ -19,13 +27,6 @@ public class OneFrameLayout extends FrameLayout {
     public OneFrameLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
-
-    private static final int mWidth = 500;
-    private float mDisplacementX;
-    // private float mLastMoveX;
-    private float mDisplacementY;
-    private float mInitialTx;
-    private boolean mTracking;
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -93,17 +94,13 @@ public class OneFrameLayout extends FrameLayout {
         return false;
     }
 
+    public void setOnSwipeListener(OnSwipeListener onSwipeListener) {
+        this.onSwipeListener = onSwipeListener;
+    }
 
     public interface OnSwipeListener {
         void rightSwipe();
 
         void leftSwipe();
-    }
-
-
-    private OnSwipeListener onSwipeListener;
-
-    public void setOnSwipeListener(OnSwipeListener onSwipeListener) {
-        this.onSwipeListener = onSwipeListener;
     }
 }

@@ -45,7 +45,8 @@ public class MonthFragment extends Fragment implements OnClickDayListener {
     private AdapterCalendar adapterCalendar;
     private ArrayList<Day> days = new ArrayList<>();
     private int imonth, iyear, currentDay, backgroundColorDays, backgroundColorDaysNV, backgroundColorCurrentDay, textColorCurrentDayDay, textColorDays, textColorDaysNV;
-
+    private OnSwipeListener onSwipeListener;
+    private OnDayClickListener onDayClickListener;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,7 +66,6 @@ public class MonthFragment extends Fragment implements OnClickDayListener {
 
     }
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -84,8 +84,6 @@ public class MonthFragment extends Fragment implements OnClickDayListener {
 
 
         recyclerViewDays.setAdapter(adapterCalendar);
-
-
 
 
         return rootView;
@@ -173,7 +171,6 @@ public class MonthFragment extends Fragment implements OnClickDayListener {
 
     }
 
-
     /**
      * retorna el mes actual iniciando desde 0=enero
      *
@@ -182,7 +179,6 @@ public class MonthFragment extends Fragment implements OnClickDayListener {
     public int getCurrentMonth() {
         return Calendar.getInstance().get(Calendar.MONTH);
     }
-
 
     /**
      * retorna el año actual
@@ -213,7 +209,6 @@ public class MonthFragment extends Fragment implements OnClickDayListener {
         Calendar mycal = new GregorianCalendar(year, month, 1);
         return mycal.getActualMaximum(Calendar.DAY_OF_MONTH);
     }
-
 
     /**
      * nos retorna el nombre de un dia especifico de una año (en ingles o español segun la configuracion)
@@ -255,17 +250,55 @@ public class MonthFragment extends Fragment implements OnClickDayListener {
         onDayClickListener.dayOnLongClik(day, position);
     }
 
+    public void setOnSwipeListener(OnSwipeListener onSwipeListener) {
+        this.onSwipeListener = onSwipeListener;
+    }
+
+    public void setOnDayClickListener(OnDayClickListener onDayClickListener) {
+        this.onDayClickListener = onDayClickListener;
+    }
+
+    public void setItemSelected(int position) {
+        days.get(position).setSelected(true);
+        for (int i = 0; i < days.size(); i++) {
+            if (i != position)
+                days.get(i).setSelected(false);
+        }
+        adapterCalendar.notifyItemChanged(0, 41);
+        adapterCalendar.notifyDataSetChanged();
+    }
+
+    /**
+     * marca un dia en el calendario como seleccionado
+     *
+     * @param position
+     */
+    public void addItemSelected(int position) {
+        days.get(position).setSelected(true);
+        adapterCalendar.notifyItemChanged(position);
+        adapterCalendar.notifyDataSetChanged();
+    }
+
+    /**
+     * remueve un dia en el calendario como seleccionado
+     *
+     * @param position
+     */
+    public void removeItemSelected(int position) {
+        days.get(position).setSelected(false);
+        adapterCalendar.notifyItemChanged(position);
+        adapterCalendar.notifyDataSetChanged();
+    }
+
+    public ArrayList<Day> getDays() {
+        return days;
+    }
+
+
     public interface OnSwipeListener {
         void rightSwipe();
 
         void leftSwipe();
-    }
-
-
-    private OnSwipeListener onSwipeListener;
-
-    public void setOnSwipeListener(OnSwipeListener onSwipeListener) {
-        this.onSwipeListener = onSwipeListener;
     }
 
 
@@ -286,52 +319,5 @@ public class MonthFragment extends Fragment implements OnClickDayListener {
          * @param day
          */
         void dayOnLongClik(Day day, int position);
-    }
-
-
-    private OnDayClickListener onDayClickListener;
-
-    public void setOnDayClickListener(OnDayClickListener onDayClickListener) {
-        this.onDayClickListener = onDayClickListener;
-    }
-
-
-    public void setItemSelected(int position) {
-        days.get(position).setSelected(true);
-        for (int i = 0; i < days.size(); i++) {
-            if (i != position)
-                days.get(i).setSelected(false);
-        }
-        adapterCalendar.notifyItemChanged(0, 41);
-        adapterCalendar.notifyDataSetChanged();
-    }
-
-
-    /**
-     * marca un dia en el calendario como seleccionado
-     *
-     * @param position
-     */
-    public void addItemSelected(int position) {
-        days.get(position).setSelected(true);
-        adapterCalendar.notifyItemChanged(position);
-        adapterCalendar.notifyDataSetChanged();
-    }
-
-
-    /**
-     * remueve un dia en el calendario como seleccionado
-     *
-     * @param position
-     */
-    public void removeItemSelected(int position) {
-        days.get(position).setSelected(false);
-        adapterCalendar.notifyItemChanged(position);
-        adapterCalendar.notifyDataSetChanged();
-    }
-
-
-    public ArrayList<Day> getDays() {
-        return days;
     }
 }
