@@ -7,11 +7,8 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -31,6 +28,10 @@ import java.util.Locale;
  */
 
 public class OneCalendarView extends LinearLayout {
+
+    private static final int LANGUAGE_SPANISH = 0;
+    private static final int LANGUAGE_ENGLISH = 1;
+    private static final int LANGUAGE_PORTUGUESE_BRAZIL = 2;
 
     AppCompatActivity mActivity;
     MonthFragment fragment;
@@ -307,84 +308,82 @@ public class OneCalendarView extends LinearLayout {
         showMonth(month, year);
     }
 
-
     /**
      * permite cambiar el lenguaje de como se visualizan los meses y dias del calendario
      *
-     * @param language SPANISH=0, ENGLISH=1;
+     * @param language SPANISH=0, ENGLISH=1, PORTUGUESE=2;
      */
     public void setLanguage(int language) {
-        if (language == 1) {//si el idioma es el ingles
-            textViewL.setText("M");
-            textViewM.setText("T");
-            textViewX.setText("W");
-            textViewJ.setText("T");
-            textViewV.setText("F");
-            textViewS.setText("S");
-            textViewD.setText("S");
+        switch (language) {
+            case LANGUAGE_PORTUGUESE_BRAZIL:
+                textViewL.setText("S");
+                textViewM.setText("T");
+                textViewX.setText("Q");
+                textViewJ.setText("Q");
+                textViewV.setText("S");
+                textViewS.setText("S");
+                textViewD.setText("D");
 
-            enero = "January";
-            febrero = "February";
-            marzo = "March";
-            abril = "April";
-            mayo = "May";
-            junio = "June";
-            julio = "July";
-            agosto = "August";
-            septiembre = "September";
-            octubre = "October";
-            noviembre = "November";
-            diciembre = "December";
+                enero = "Janeiro";
+                febrero = "Fevereiro";
+                marzo = "Março";
+                abril = "Abril";
+                mayo = "Maio";
+                junio = "Junho";
+                julio = "Julho";
+                agosto = "Agosto";
+                septiembre = "Setembro";
+                octubre = "Outubro";
+                noviembre = "Novembro";
+                diciembre = "Dezembro";
+                break;
+            case LANGUAGE_ENGLISH:
+                textViewL.setText("M");
+                textViewM.setText("T");
+                textViewX.setText("W");
+                textViewJ.setText("T");
+                textViewV.setText("F");
+                textViewS.setText("S");
+                textViewD.setText("S");
 
-        } if (language == 2) {//si el idioma es el ingles
-        textViewL.setText("S");
-        textViewM.setText("T");
-        textViewX.setText("Q");
-        textViewJ.setText("Q");
-        textViewV.setText("S");
-        textViewS.setText("S");
-        textViewD.setText("D");
+                enero = "January";
+                febrero = "February";
+                marzo = "March";
+                abril = "April";
+                mayo = "May";
+                junio = "June";
+                julio = "July";
+                agosto = "August";
+                septiembre = "September";
+                octubre = "October";
+                noviembre = "November";
+                diciembre = "December";
+                break;
+            case LANGUAGE_SPANISH:
+                textViewL.setText("L");
+                textViewM.setText("M");
+                textViewX.setText("X");
+                textViewJ.setText("J");
+                textViewV.setText("V");
+                textViewS.setText("S");
+                textViewD.setText("D");
 
-        enero = "Janeiro";
-        febrero = "Fevereiro";
-        marzo = "Março";
-        abril = "Abril";
-        mayo = "Maio";
-        junio = "Junho";
-        julio = "Julho";
-        agosto = "Agosto";
-        septiembre = "Setembro";
-        octubre = "Outubro";
-        noviembre = "Novembro";
-        diciembre = "Dezembro";
-
-    } else {
-
-            textViewL.setText("L");
-            textViewM.setText("M");
-            textViewX.setText("X");
-            textViewJ.setText("J");
-            textViewV.setText("V");
-            textViewS.setText("S");
-            textViewD.setText("D");
-
-            enero = "Enero";
-            febrero = "Febrero";
-            marzo = "Marzo";
-            abril = "Abril";
-            mayo = "Mayo";
-            junio = "Junio";
-            julio = "Julio";
-            agosto = "Agosto";
-            septiembre = "Septiembre";
-            octubre = "Octubre";
-            noviembre = "Noviembre";
-            diciembre = "Deciembre";
+                enero = "Enero";
+                febrero = "Febrero";
+                marzo = "Marzo";
+                abril = "Abril";
+                mayo = "Mayo";
+                junio = "Junio";
+                julio = "Julio";
+                agosto = "Agosto";
+                septiembre = "Septiembre";
+                octubre = "Octubre";
+                noviembre = "Noviembre";
+                diciembre = "Deciembre";
+                break;
         }
 
         textViewMY.setText(getStringMonth(month) + " " + year);
-
-
     }
 
     /**
@@ -558,6 +557,7 @@ public class OneCalendarView extends LinearLayout {
 
     /**
      * retorna el mes visible en el calendario
+     *
      * @return
      */
     public int getMonth() {
@@ -566,6 +566,7 @@ public class OneCalendarView extends LinearLayout {
 
     /**
      * retorna el año del mes visible en el calendario
+     *
      * @return
      */
     public int getYear() {
