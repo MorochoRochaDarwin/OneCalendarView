@@ -1,4 +1,4 @@
-package com.darwindeveloper.onecalendar.clases;
+package com.darwindeveloper.onecalendar.list;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

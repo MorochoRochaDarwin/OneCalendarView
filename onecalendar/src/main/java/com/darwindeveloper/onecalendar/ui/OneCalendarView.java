@@ -1,4 +1,4 @@
-package com.darwindeveloper.onecalendar.views;
+package com.darwindeveloper.onecalendar.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -15,8 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.darwindeveloper.onecalendar.R;
-import com.darwindeveloper.onecalendar.clases.Day;
 import com.darwindeveloper.onecalendar.fragments.MonthFragment;
+import com.darwindeveloper.onecalendar.model.Day;
 
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;

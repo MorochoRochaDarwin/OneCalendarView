@@ -1,4 +1,4 @@
-package com.darwindeveloper.onecalendar.clases;
+package com.darwindeveloper.onecalendar.model;
 
 import android.graphics.Color;
 

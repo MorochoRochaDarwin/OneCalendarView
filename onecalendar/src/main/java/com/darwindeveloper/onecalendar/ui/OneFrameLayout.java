@@ -1,4 +1,4 @@
-package com.darwindeveloper.onecalendar.views;
+package com.darwindeveloper.onecalendar.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;

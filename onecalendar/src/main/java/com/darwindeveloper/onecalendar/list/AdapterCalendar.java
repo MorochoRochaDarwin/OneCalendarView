@@ -1,4 +1,4 @@
-package com.darwindeveloper.onecalendar.clases;
+package com.darwindeveloper.onecalendar.list;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.darwindeveloper.onecalendar.R;
+import com.darwindeveloper.onecalendar.model.Day;
 
 import java.util.ArrayList;
 import java.util.Calendar;

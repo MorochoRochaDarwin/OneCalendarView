@@ -157,7 +157,7 @@
 
     </RelativeLayout>
 
-    <com.darwindeveloper.onecalendar.views.OneFrameLayout
+    <com.darwindeveloper.onecalendar.ui.OneFrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

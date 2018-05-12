@@ -1,11 +1,11 @@
 package com.darwindeveloper.onecalendarview;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
-import com.darwindeveloper.onecalendar.clases.Day;
-import com.darwindeveloper.onecalendar.views.OneCalendarView;
+import com.darwindeveloper.onecalendar.model.Day;
+import com.darwindeveloper.onecalendar.ui.OneCalendarView;
 
 import java.util.Calendar;
 import java.util.Date;

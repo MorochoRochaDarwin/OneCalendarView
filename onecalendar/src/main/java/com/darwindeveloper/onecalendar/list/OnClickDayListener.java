@@ -1,4 +1,6 @@
-package com.darwindeveloper.onecalendar.clases;
+package com.darwindeveloper.onecalendar.list;
+
+import com.darwindeveloper.onecalendar.model.Day;
 
 public interface OnClickDayListener {
     /**
