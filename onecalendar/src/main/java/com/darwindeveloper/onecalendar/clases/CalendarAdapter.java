@@ -1,20 +1,18 @@
 package com.darwindeveloper.onecalendar.clases;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.darwindeveloper.onecalendar.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 /**
  * Created by DARWIN on 1/3/2017.
@@ -33,20 +31,23 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.ViewDa
         this.backgroundColorSelectedDay = backgroundColorSelectedDay;
     }
 
+    @NonNull
     @Override
-    public ViewDayHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewDayHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_calendar, parent, false);
         return new ViewDayHolder(view);
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
-    public void onBindViewHolder(final ViewDayHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull ViewDayHolder holder, int positionAdapter) {
+        final int position = positionAdapter;
 
         final Day dia = dias.get(position);
         Calendar cal = Calendar.getInstance();
         cal.setTime(dia.getDate());
         int nday = cal.get(Calendar.DAY_OF_MONTH);
-        holder.dia.setText(nday + "");
+        holder.dia.setText(String.format("%d", nday));
 
         if (dia.isSelected()) {
             holder.dia.setTextColor(textColorSelectedDay);
@@ -75,8 +76,6 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.ViewDa
                 return false;
             }
         });
-
-
     }
 
     @Override
@@ -89,11 +88,9 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.ViewDa
 
         Button dia;
 
-
         public ViewDayHolder(View itemView) {
             super(itemView);
             dia = (Button) itemView.findViewById(R.id.textViewDay);
-
         }
     }
 
@@ -115,8 +112,6 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.ViewDa
          * @param day
          */
         void dayOnLongClik(Day day, int position);
-
-
     }
 
 
@@ -125,6 +120,5 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.ViewDa
     public void setDayOnClickListener(DayOnClickListener dayOnClickListener) {
         this.dayOnClickListener = dayOnClickListener;
     }
-
 
 }
