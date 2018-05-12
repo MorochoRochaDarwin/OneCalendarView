@@ -1,4 +1,4 @@
-package com.darwindeveloper.onecalendar.list;
+package com.darwindeveloper.onecalendar.domain;
 
 import com.darwindeveloper.onecalendar.model.Day;
 

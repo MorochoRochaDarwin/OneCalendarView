@@ -11,8 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.darwindeveloper.onecalendar.R;
+import com.darwindeveloper.onecalendar.domain.OnClickDayListener;
 import com.darwindeveloper.onecalendar.list.AdapterCalendar;
-import com.darwindeveloper.onecalendar.list.OnClickDayListener;
 import com.darwindeveloper.onecalendar.model.Day;
 
 import java.text.SimpleDateFormat;

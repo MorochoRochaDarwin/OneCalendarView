@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.darwindeveloper.onecalendar.domain.OneCalendarClickListener;
 import com.darwindeveloper.onecalendar.model.Day;
 import com.darwindeveloper.onecalendar.ui.OneCalendarView;
 
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         //calendarView.setOnCalendarChangeListener(params)
         //setOneCalendarClickListener(params)
 
-        calendarView.setOneCalendarClickListener(new OneCalendarView.OneCalendarClickListener() {
+        calendarView.setOneCalendarClickListener(new OneCalendarClickListener() {
             @Override
             public void dateOnClick(Day day, int position) {
 
@@ -79,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
         //el siguiente fragmento de codigo muestra como obtener los datos de un dia en el calendario
         //ademas de realizar otras acciones
-        calendarView.setOneCalendarClickListener(new OneCalendarView.OneCalendarClickListener() {
+        calendarView.setOneCalendarClickListener(new OneCalendarClickListener() {
 
             /**
              * cuando se da click en un dia en el calendario mostrado
