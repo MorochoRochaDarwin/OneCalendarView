@@ -11,9 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.darwindeveloper.onecalendar.R;
-import com.darwindeveloper.onecalendar.clases.CalendarAdapter;
+import com.darwindeveloper.onecalendar.clases.AdapterCalendar;
 import com.darwindeveloper.onecalendar.clases.Day;
-import com.darwindeveloper.onecalendar.clases.DayOnClickListener;
+import com.darwindeveloper.onecalendar.clases.OnClickDayListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ import java.util.Locale;
  * Created by DARWIN on 3/3/2017.
  */
 
-public class MonthFragment extends Fragment implements DayOnClickListener {
+public class MonthFragment extends Fragment implements OnClickDayListener {
 
     public static final String MONTH = "com.darwindeveloper.onecalendar.monthfragemnt.month";
     public static final String YEAR = "com.darwindeveloper.onecalendar.monthfragemnt.year";
@@ -42,7 +42,7 @@ public class MonthFragment extends Fragment implements DayOnClickListener {
     private Context context;
     private View rootView;
     private RecyclerView recyclerViewDays;
-    private CalendarAdapter calendarAdapter;
+    private AdapterCalendar adapterCalendar;
     private ArrayList<Day> days = new ArrayList<>();
     private int imonth, iyear, currentDay, backgroundColorDays, backgroundColorDaysNV, backgroundColorCurrentDay, textColorCurrentDayDay, textColorDays, textColorDaysNV;
 
@@ -79,11 +79,11 @@ public class MonthFragment extends Fragment implements DayOnClickListener {
 
         fillUpMonth(month, year);
 
-        calendarAdapter = new CalendarAdapter(context, days, getArguments().getInt(TCSDAY), getArguments().getInt(BCSDAY));
-        calendarAdapter.setDayOnClickListener(this);
+        adapterCalendar = new AdapterCalendar(context, days, getArguments().getInt(TCSDAY), getArguments().getInt(BCSDAY));
+        adapterCalendar.setOnClickDayListener(this);
 
 
-        recyclerViewDays.setAdapter(calendarAdapter);
+        recyclerViewDays.setAdapter(adapterCalendar);
 
 
 
@@ -302,8 +302,8 @@ public class MonthFragment extends Fragment implements DayOnClickListener {
             if (i != position)
                 days.get(i).setSelected(false);
         }
-        calendarAdapter.notifyItemChanged(0, 41);
-        calendarAdapter.notifyDataSetChanged();
+        adapterCalendar.notifyItemChanged(0, 41);
+        adapterCalendar.notifyDataSetChanged();
     }
 
 
@@ -314,8 +314,8 @@ public class MonthFragment extends Fragment implements DayOnClickListener {
      */
     public void addItemSelected(int position) {
         days.get(position).setSelected(true);
-        calendarAdapter.notifyItemChanged(position);
-        calendarAdapter.notifyDataSetChanged();
+        adapterCalendar.notifyItemChanged(position);
+        adapterCalendar.notifyDataSetChanged();
     }
 
 
@@ -326,8 +326,8 @@ public class MonthFragment extends Fragment implements DayOnClickListener {
      */
     public void removeItemSelected(int position) {
         days.get(position).setSelected(false);
-        calendarAdapter.notifyItemChanged(position);
-        calendarAdapter.notifyDataSetChanged();
+        adapterCalendar.notifyItemChanged(position);
+        adapterCalendar.notifyDataSetChanged();
     }
 
 

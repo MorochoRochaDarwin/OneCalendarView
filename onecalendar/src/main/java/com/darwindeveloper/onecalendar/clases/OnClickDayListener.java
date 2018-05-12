@@ -1,6 +1,6 @@
 package com.darwindeveloper.onecalendar.clases;
 
-public interface DayOnClickListener {
+public interface OnClickDayListener {
     /**
      * un objeto de tipo day para obtener la fecha (año,mes,dia) con un objeto calendar
      * <p>

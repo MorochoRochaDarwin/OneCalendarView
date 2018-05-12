@@ -6,11 +6,11 @@ import android.widget.Button;
 
 import com.darwindeveloper.onecalendar.R;
 
-public class ViewDayHolder extends RecyclerView.ViewHolder {
+public class ViewHolderDay extends RecyclerView.ViewHolder {
 
     Button dia;
 
-    public ViewDayHolder(View itemView) {
+    public ViewHolderDay(View itemView) {
         super(itemView);
         dia = (Button) itemView.findViewById(R.id.textViewDay);
     }

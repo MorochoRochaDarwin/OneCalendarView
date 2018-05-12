@@ -17,13 +17,15 @@ import java.util.Calendar;
  * Created by DARWIN on 1/3/2017.
  */
 
-public class CalendarAdapter extends RecyclerView.Adapter<ViewDayHolder> {
+public class AdapterCalendar extends RecyclerView.Adapter<ViewHolderDay> {
 
     private Context context;
     private ArrayList<Day> dias;
     private int textColorSelectedDay, backgroundColorSelectedDay;
 
-    public CalendarAdapter(Context context, ArrayList<Day> dias, int textColorSelectedDay, int backgroundColorSelectedDay) {
+    private OnClickDayListener onClickDayListener;
+
+    public AdapterCalendar(Context context, ArrayList<Day> dias, int textColorSelectedDay, int backgroundColorSelectedDay) {
         this.context = context;
         this.dias = dias;
         this.textColorSelectedDay = textColorSelectedDay;
@@ -32,14 +34,19 @@ public class CalendarAdapter extends RecyclerView.Adapter<ViewDayHolder> {
 
     @NonNull
     @Override
-    public ViewDayHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolderDay onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_calendar, parent, false);
-        return new ViewDayHolder(view);
+        return new ViewHolderDay(view);
+    }
+
+    @Override
+    public int getItemCount() {
+        return dias.size();
     }
 
     @SuppressLint("DefaultLocale")
     @Override
-    public void onBindViewHolder(@NonNull ViewDayHolder holder, int positionAdapter) {
+    public void onBindViewHolder(@NonNull ViewHolderDay holder, int positionAdapter) {
         final int position = positionAdapter;
 
         final Day dia = dias.get(position);
@@ -63,7 +70,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<ViewDayHolder> {
             @Override
             public void onClick(View view) {
 
-                dayOnClickListener.dayOnClick(dia, position);
+                onClickDayListener.dayOnClick(dia, position);
             }
         });
 
@@ -71,22 +78,14 @@ public class CalendarAdapter extends RecyclerView.Adapter<ViewDayHolder> {
         holder.dia.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                dayOnClickListener.dayOnLongClik(dia, position);
+                onClickDayListener.dayOnLongClik(dia, position);
                 return false;
             }
         });
     }
 
-    @Override
-    public int getItemCount() {
-        return dias.size();
-    }
-
-
-    private DayOnClickListener dayOnClickListener;
-
-    public void setDayOnClickListener(DayOnClickListener dayOnClickListener) {
-        this.dayOnClickListener = dayOnClickListener;
+    public void setOnClickDayListener(OnClickDayListener onClickDayListener) {
+        this.onClickDayListener = onClickDayListener;
     }
 
 }
