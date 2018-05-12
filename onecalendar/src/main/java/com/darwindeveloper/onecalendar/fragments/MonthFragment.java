@@ -1,7 +1,6 @@
 package com.darwindeveloper.onecalendar.fragments;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,7 +13,7 @@ import android.view.ViewGroup;
 import com.darwindeveloper.onecalendar.R;
 import com.darwindeveloper.onecalendar.clases.CalendarAdapter;
 import com.darwindeveloper.onecalendar.clases.Day;
-
+import com.darwindeveloper.onecalendar.clases.DayOnClickListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ import java.util.Locale;
  * Created by DARWIN on 3/3/2017.
  */
 
-public class MonthFragment extends Fragment implements CalendarAdapter.DayOnClickListener {
+public class MonthFragment extends Fragment implements DayOnClickListener {
 
     public static final String MONTH = "com.darwindeveloper.onecalendar.monthfragemnt.month";
     public static final String YEAR = "com.darwindeveloper.onecalendar.monthfragemnt.year";

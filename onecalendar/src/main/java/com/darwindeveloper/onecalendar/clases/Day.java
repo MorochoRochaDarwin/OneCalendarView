@@ -9,6 +9,7 @@ import java.util.Date;
  */
 
 public class Day {
+
     private Date date;
     private boolean valid, selected;
     private int textColor = Color.parseColor("#0099cc");
