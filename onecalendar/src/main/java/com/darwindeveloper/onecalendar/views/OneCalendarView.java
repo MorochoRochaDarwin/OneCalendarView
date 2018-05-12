@@ -299,8 +299,6 @@ public class OneCalendarView extends LinearLayout {
         textViewV.setText(getInitialWeekday(Calendar.FRIDAY));
         textViewS.setText(getInitialWeekday(Calendar.SATURDAY));
         textViewD.setText(getInitialWeekday(Calendar.SUNDAY));
-
-        textViewMY.setText(String.format("%s %d", getStringMonth(month), year));
     }
 
 
