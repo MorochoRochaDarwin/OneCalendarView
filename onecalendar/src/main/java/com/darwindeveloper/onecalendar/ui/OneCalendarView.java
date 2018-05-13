@@ -10,11 +10,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.darwindeveloper.onecalendar.R;
+import com.darwindeveloper.onecalendar.domain.OnCalendarChangeListener;
 import com.darwindeveloper.onecalendar.domain.OneCalendarClickListener;
 import com.darwindeveloper.onecalendar.fragments.MonthFragment;
 import com.darwindeveloper.onecalendar.model.Day;
@@ -32,13 +32,14 @@ import java.util.Locale;
 
 public class OneCalendarView extends LinearLayout {
 
-    public static final int SPANISH = 0, ENGLISH = 1;//si el calendario estara en español o ingles
     private static final Calendar calendarForComputeData = Calendar.getInstance(Locale.getDefault());
     private static final DateFormatSymbols dfs = new DateFormatSymbols();
     private static final String[] months = dfs.getShortMonths();
+
     AppCompatActivity mActivity;
     MonthFragment fragment;
-    //para el estilo del calendar
+
+    // Colors
     int mainBackgroundColor = Color.parseColor("#0239a9");
     int calendarBackgroundColor = Color.parseColor("#FFF5F5F5");
     int currentDayBackgroundColor = Color.parseColor("#0099cc");
@@ -50,15 +51,25 @@ public class OneCalendarView extends LinearLayout {
     int textColorSelectedDay = Color.parseColor("#000000");
     int textColorCurrentDayDay = Color.parseColor("#000000");
     int backgroundColorSelectedDay = Color.parseColor("#d2d2d2");
-    private LinearLayout mainContent;
-    private OneFrameLayout fragment_container;
-    private ImageButton buttonUp, buttonDown;
+
+    // Views
+    private LinearLayout linearLayout;
+    private OneFrameLayout oneFrameLayout;
     private TextView textViewMY;
-    private TextView textViewD, textViewL, textViewM, textViewX, textViewJ, textViewV, textViewS;
-    private int iday, imonth, iyear, month, year;
+    private TextView textViewD;
+    private TextView textViewL;
+    private TextView textViewM;
+    private TextView textViewX;
+    private TextView textViewJ;
+    private TextView textViewV;
+    private TextView textViewS;
+
+    private int monthVisibleOnCalendar;
+    private int yearVisibleOnCalendar;
+
+    // Listeners
     private OnCalendarChangeListener onCalendarChangeListener;
     private OneCalendarClickListener oneCalendarClickListener;
-
 
     public OneCalendarView(Context context) {
         super(context);
@@ -128,26 +139,17 @@ public class OneCalendarView extends LinearLayout {
 
         a.recycle();
 
-
-        LayoutInflater inflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.ui_one_calendar_view, this, true);
-
     }
 
     private void init() {
-        imonth = getCurrentMonth();
-        iyear = getCurrentYear();
-        iday = getCurrentDayMonth();
-
-        month = imonth;
-        year = iyear;
+        yearVisibleOnCalendar = getCurrentYear();
+        monthVisibleOnCalendar = getCurrentMonth();
 
         //inicializamos las vistas
-        mainContent = findViewById(R.id.mainContent);
-        fragment_container = findViewById(R.id.fragment_container);
-        buttonDown = findViewById(R.id.imageButtonDown);
-        buttonUp = findViewById(R.id.imageButtonUp);
+        linearLayout = findViewById(R.id.mainContent);
+        oneFrameLayout = findViewById(R.id.fragment_container);
         textViewMY = findViewById(R.id.textViewMY);
 
         textViewD = findViewById(R.id.textViewD);
@@ -162,8 +164,7 @@ public class OneCalendarView extends LinearLayout {
 
         setLanguage();
 
-        fragment_container.setOnSwipeListener(new OneFrameLayout.OnSwipeListener() {
-
+        oneFrameLayout.setOnSwipeListener(new OneFrameLayout.OnSwipeListener() {
             @Override
             public void rightSwipe() {
                 prevMonth();
@@ -178,7 +179,7 @@ public class OneCalendarView extends LinearLayout {
         });
 
 
-        buttonDown.setOnClickListener(new OnClickListener() {
+        (findViewById(R.id.imageButtonDown)).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 prevMonth();
@@ -186,7 +187,7 @@ public class OneCalendarView extends LinearLayout {
             }
         });
 
-        buttonUp.setOnClickListener(new OnClickListener() {
+        (findViewById(R.id.imageButtonUp)).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 nextMoth();
@@ -198,21 +199,23 @@ public class OneCalendarView extends LinearLayout {
 
 
     //MIS METODOS
-
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
         init();
 
-        mainContent.setBackgroundColor(mainBackgroundColor);
-        fragment_container.setBackgroundColor(calendarBackgroundColor);
+        linearLayout.setBackgroundColor(mainBackgroundColor);
+        oneFrameLayout.setBackgroundColor(calendarBackgroundColor);
 
-        showMonth(month, year);
+        showMonth();
+    }
+
+    private void showMonth() {
+        showMonth(monthVisibleOnCalendar, yearVisibleOnCalendar);
     }
 
     @SuppressLint("DefaultLocale")
     private void showMonth(final int month, int year) {
-
         textViewMY.setText(String.format("%s %d", getStringMonth(month), year));
 
         fragment = new MonthFragment();
@@ -261,14 +264,13 @@ public class OneCalendarView extends LinearLayout {
 
         FragmentTransaction transaction = mActivity.getSupportFragmentManager().beginTransaction();
 
-        // Replace whatever is in the fragment_container view with this fragment,
+        // Replace whatever is in the oneFrameLayout view with this fragment,
         // and add the transaction to the back stack so the user can navigate back
         transaction.replace(R.id.fragment_container, fragment);
         //transaction.addToBackStack(null);
 
         // Commit the transaction
         transaction.commit();
-
     }
 
     /**
@@ -346,24 +348,24 @@ public class OneCalendarView extends LinearLayout {
     }
 
     private void nextMoth() {
-        if (month == 11) {
-            month = 0;
-            year++;
+        if (monthVisibleOnCalendar == 11) {
+            monthVisibleOnCalendar = 0;
+            yearVisibleOnCalendar++;
         } else {
-            month++;
+            monthVisibleOnCalendar++;
         }
-        showMonth(month, year);
+        showMonth();
     }
 
     private void prevMonth() {
-        if (month == 0) {
-            month = 11;
-            year--;
+        if (monthVisibleOnCalendar == 0) {
+            monthVisibleOnCalendar = 11;
+            yearVisibleOnCalendar--;
         } else {
-            month--;
+            monthVisibleOnCalendar--;
         }
 
-        showMonth(month, year);
+        showMonth();
     }
 
     public void setOnCalendarChangeListener(OnCalendarChangeListener onCalendarChangeListener) {
@@ -372,24 +374,6 @@ public class OneCalendarView extends LinearLayout {
 
     public void setOneCalendarClickListener(OneCalendarClickListener oneCalendarClickListener) {
         this.oneCalendarClickListener = oneCalendarClickListener;
-    }
-
-    /**
-     * retorna el mes visible en el calendario
-     *
-     * @return
-     */
-    public int getMonth() {
-        return month;
-    }
-
-    /**
-     * retorna el año del mes visible en el calendario
-     *
-     * @return
-     */
-    public int getYear() {
-        return year;
     }
 
     /**
@@ -431,16 +415,11 @@ public class OneCalendarView extends LinearLayout {
         return months[calendarForComputeData.get(Calendar.MONTH)];
     }
 
-    public interface OnCalendarChangeListener {
-        /**
-         * notifica al usuario que el calendario a cambiado al mes anterior
-         */
-        void prevMonth();
-
-        /**
-         * notifica al usuario que el calendario a cambiado al mes siguiente
-         */
-        void nextMonth();
+    public int getMonthVisibleOnCalendar() {
+        return monthVisibleOnCalendar;
     }
 
+    public int getYearVisibleOnCalendar() {
+        return yearVisibleOnCalendar;
+    }
 }

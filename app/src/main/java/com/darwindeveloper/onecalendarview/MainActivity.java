@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.darwindeveloper.onecalendar.domain.OnCalendarChangeListener;
 import com.darwindeveloper.onecalendar.domain.OneCalendarClickListener;
 import com.darwindeveloper.onecalendar.model.Day;
 import com.darwindeveloper.onecalendar.ui.OneCalendarView;
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        calendarView.setOnCalendarChangeListener(new OneCalendarView.OnCalendarChangeListener() {
+        calendarView.setOnCalendarChangeListener(new OnCalendarChangeListener() {
             @Override
             public void prevMonth() {
 
@@ -58,14 +59,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void initCalendar() {
         //el siguiente fragmento puede ser usado para capturar los swipes en el calendar
-        calendarView.setOnCalendarChangeListener(new OneCalendarView.OnCalendarChangeListener() {
+        calendarView.setOnCalendarChangeListener(new OnCalendarChangeListener() {
 
             /**
              * notifica al usuario que el calendario a cambiado al mes anterior
              */
             @Override
             public void prevMonth() {
-                Toast.makeText(MainActivity.this, calendarView.getStringMonth(calendarView.getMonth()) + " " + calendarView.getYear(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, calendarView.getStringMonth(calendarView.getMonthVisibleOnCalendar()) + " " + calendarView.getYearVisibleOnCalendar(), Toast.LENGTH_SHORT).show();
             }
 
             /**
@@ -73,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
              */
             @Override
             public void nextMonth() {
-                Toast.makeText(MainActivity.this, calendarView.getStringMonth(calendarView.getMonth()) + " " + calendarView.getYear(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, calendarView.getStringMonth(calendarView.getMonthVisibleOnCalendar()) + " " + calendarView.getYearVisibleOnCalendar(), Toast.LENGTH_SHORT).show();
             }
         });
 
