@@ -71,11 +71,9 @@ public class AdapterCalendar extends RecyclerView.Adapter<ViewHolderDay> {
         holder.dia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 onClickDayListener.dayOnClick(dia, position);
             }
         });
-
 
         holder.dia.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -90,4 +88,17 @@ public class AdapterCalendar extends RecyclerView.Adapter<ViewHolderDay> {
         this.onClickDayListener = onClickDayListener;
     }
 
+    public Day getDay(int dayOfMonth) {
+        for (int i = 0; i < dias.size(); i++) {
+            Day dia = dias.get(i);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(dia.getDate());
+
+            if (calendar.get(Calendar.DAY_OF_MONTH) == dayOfMonth) {
+                return dia;
+            }
+        }
+
+        return null;
+    }
 }
