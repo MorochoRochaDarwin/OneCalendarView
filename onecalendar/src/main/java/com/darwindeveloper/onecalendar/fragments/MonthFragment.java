@@ -2,6 +2,7 @@ package com.darwindeveloper.onecalendar.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -12,6 +13,8 @@ import android.view.ViewGroup;
 
 import com.darwindeveloper.onecalendar.R;
 import com.darwindeveloper.onecalendar.domain.OnClickDayListener;
+import com.darwindeveloper.onecalendar.domain.OnDayClickListener;
+import com.darwindeveloper.onecalendar.domain.OnSwipeListener;
 import com.darwindeveloper.onecalendar.list.AdapterCalendar;
 import com.darwindeveloper.onecalendar.model.Day;
 
@@ -68,11 +71,10 @@ public class MonthFragment extends Fragment implements OnClickDayListener {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_month, container, false);
         recyclerViewDays = rootView.findViewById(R.id.recyclerView);
         recyclerViewDays.setLayoutManager(new GridLayoutManager(context, 7));
-
 
         int month = getArguments().getInt(MONTH);
         int year = getArguments().getInt(YEAR);
@@ -81,10 +83,7 @@ public class MonthFragment extends Fragment implements OnClickDayListener {
 
         adapterCalendar = new AdapterCalendar(context, days, getArguments().getInt(TCSDAY), getArguments().getInt(BCSDAY));
         adapterCalendar.setOnClickDayListener(this);
-
-
         recyclerViewDays.setAdapter(adapterCalendar);
-
 
         return rootView;
     }
@@ -92,7 +91,6 @@ public class MonthFragment extends Fragment implements OnClickDayListener {
     private void fillUpMonth(int month, int year) {
         //almaceno el nombre del primer  dia del mes y año en cuestion
         String nameFirstDay = getNameDay(1, month, year);
-
 
         int blankSpaces = 0;
         switch (nameFirstDay) {
@@ -129,17 +127,15 @@ public class MonthFragment extends Fragment implements OnClickDayListener {
             }
 
             int numdays = getNumberOfDaysMonthYear(tyear, tmonth);
-
             for (int i = numdays - blankSpaces + 1; i <= numdays; i++) {
-                days.add(new Day(new Date(tyear, tmonth, i), false, textColorDaysNV, backgroundColorDaysNV));
+                Date date = new Date(tyear, tmonth, i);
+                days.add(new Day(date, false, textColorDaysNV, backgroundColorDaysNV));
                 squares++;
             }
         }
 
-
         int numberOfDaysMonthYear = getNumberOfDaysMonthYear(year, month);
         for (int i = 1; i <= numberOfDaysMonthYear; i++) {
-
             if (this.iyear == year && this.imonth == month && this.currentDay == i) {
                 days.add(new Day(new Date(year, month, i), textColorCurrentDayDay, backgroundColorCurrentDay));
             } else {
@@ -168,7 +164,6 @@ public class MonthFragment extends Fragment implements OnClickDayListener {
                 }
             }
         }
-
     }
 
     /**
@@ -246,7 +241,6 @@ public class MonthFragment extends Fragment implements OnClickDayListener {
      */
     @Override
     public void dayOnLongClik(Day day, int position) {
-
         onDayClickListener.dayOnLongClik(day, position);
     }
 
@@ -294,30 +288,4 @@ public class MonthFragment extends Fragment implements OnClickDayListener {
         return days;
     }
 
-
-    public interface OnSwipeListener {
-        void rightSwipe();
-
-        void leftSwipe();
-    }
-
-
-    public interface OnDayClickListener {
-        /**
-         * un objeto de tipo day para obtener la fecha (año,mes,dia) con un objeto calendar
-         * <p>
-         * otros metodos como setBackgroundColor(int backgroundColor) y getBackgroundColor() color del fondo del numero de dia del mes
-         * setTextColor(int textColor) y getTextColor() color del texto numero de dia del mes
-         *
-         * @param day
-         */
-        void dayOnClick(Day day, int position);
-
-        /**
-         * similar a dayOnClick solo que este se ejecuta cuando haya un clic prolongado
-         *
-         * @param day
-         */
-        void dayOnLongClik(Day day, int position);
-    }
 }
