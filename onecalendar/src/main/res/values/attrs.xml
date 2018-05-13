@@ -9,6 +9,7 @@
         <attr name="textColorDaysOfMonth" format="color" />
         <attr name="textColorDaysOfAnotherMonth" format="color" />
         <attr name="textColorMonthAndYear" format="color" />
+        <attr name="textColorWeek" format="color" />
         <attr name="textColorSelectedDay" format="color" />
         <attr name="textColorCurrentDayDay" format="color" />
         <attr name="backgroundColorSelectedDay" format="color" />

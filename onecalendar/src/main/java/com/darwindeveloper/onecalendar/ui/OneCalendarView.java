@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.darwindeveloper.onecalendar.R;
 import com.darwindeveloper.onecalendar.domain.OnCalendarChangeListener;
+import com.darwindeveloper.onecalendar.domain.OnDayClickListener;
 import com.darwindeveloper.onecalendar.domain.OneCalendarClickListener;
 import com.darwindeveloper.onecalendar.fragments.MonthFragment;
 import com.darwindeveloper.onecalendar.model.Day;
@@ -48,6 +49,7 @@ public class OneCalendarView extends LinearLayout {
     int textColorDaysOfMonth = Color.parseColor("#0099cc");
     int textColorDaysOfAnotherMonth = Color.parseColor("#d2d2d2");
     int textColorMonthAndYear = Color.parseColor("#0099cc");
+    int textColorWeek = Color.parseColor("#0099cc");
     int textColorSelectedDay = Color.parseColor("#000000");
     int textColorCurrentDayDay = Color.parseColor("#000000");
     int backgroundColorSelectedDay = Color.parseColor("#d2d2d2");
@@ -123,6 +125,11 @@ public class OneCalendarView extends LinearLayout {
         }
 
         try {
+            textColorWeek = Color.parseColor(a.getString(R.styleable.OneCalendarView_textColorWeek));
+        } catch (NullPointerException e) {
+        }
+
+        try {
             textColorSelectedDay = Color.parseColor(a.getString(R.styleable.OneCalendarView_textColorSelectedDay));
         } catch (NullPointerException e) {
         }
@@ -159,6 +166,14 @@ public class OneCalendarView extends LinearLayout {
         textViewJ = findViewById(R.id.textViewJ);
         textViewV = findViewById(R.id.textViewV);
         textViewS = findViewById(R.id.textViewS);
+
+        textViewD.setTextColor(textColorWeek);
+        textViewL.setTextColor(textColorWeek);
+        textViewM.setTextColor(textColorWeek);
+        textViewX.setTextColor(textColorWeek);
+        textViewJ.setTextColor(textColorWeek);
+        textViewV.setTextColor(textColorWeek);
+        textViewS.setTextColor(textColorWeek);
 
         textViewMY.setTextColor(textColorMonthAndYear);
 
@@ -233,7 +248,7 @@ public class OneCalendarView extends LinearLayout {
         bundle.putInt(MonthFragment.BCSDAY, backgroundColorSelectedDay);
         fragment.setArguments(bundle);
 
-        fragment.setOnDayClickListener(new MonthFragment.OnDayClickListener() {
+        fragment.setOnDayClickListener(new OnDayClickListener() {
 
             /**
              * un objeto de tipo day para obtener la fecha (año,mes,dia) con un objeto calendar
