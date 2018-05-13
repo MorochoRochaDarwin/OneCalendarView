@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainContent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -89,8 +90,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="D"
-                android:textColor="#fff" />
+                tools:text="D"
+                tools:textColor="#fff" />
 
             <TextView
                 android:id="@+id/textViewL"
@@ -98,8 +99,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="L"
-                android:textColor="#fff" />
+                tools:text="L"
+                tools:textColor="#fff" />
 
             <TextView
                 android:id="@+id/textViewM"
@@ -107,8 +108,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="M"
-                android:textColor="#fff" />
+                tools:text="M"
+                tools:textColor="#fff" />
 
 
             <TextView
@@ -117,8 +118,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="X"
-                android:textColor="#fff" />
+                tools:text="X"
+                tools:textColor="#fff" />
 
 
             <TextView
@@ -127,8 +128,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="J"
-                android:textColor="#fff" />
+                tools:text="J"
+                tools:textColor="#fff" />
 
 
             <TextView
@@ -137,8 +138,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="V"
-                android:textColor="#fff" />
+                tools:text="V"
+                tools:textColor="#fff" />
 
             <TextView
                 android:id="@+id/textViewS"
@@ -146,8 +147,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="S"
-                android:textColor="#fff" />
+                tools:text="S"
+                tools:textColor="#fff" />
 
         </LinearLayout>
 
