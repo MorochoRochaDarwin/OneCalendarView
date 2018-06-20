@@ -1,11 +1,13 @@
 package com.darwindeveloper.onecalendarview;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
-import com.darwindeveloper.onecalendar.clases.Day;
-import com.darwindeveloper.onecalendar.views.OneCalendarView;
+import com.darwindeveloper.onecalendar.domain.OnCalendarChangeListener;
+import com.darwindeveloper.onecalendar.domain.OneCalendarClickListener;
+import com.darwindeveloper.onecalendar.model.Day;
+import com.darwindeveloper.onecalendar.ui.OneCalendarView;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -18,13 +20,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        calendarView = (OneCalendarView) findViewById(R.id.oneCalendar);
+        calendarView = findViewById(R.id.oneCalendar);
 
         //los metodos son obigatorios
         //calendarView.setOnCalendarChangeListener(params)
         //setOneCalendarClickListener(params)
 
-        calendarView.setOneCalendarClickListener(new OneCalendarView.OneCalendarClickListener() {
+        calendarView.setOneCalendarClickListener(new OneCalendarClickListener() {
             @Override
             public void dateOnClick(Day day, int position) {
 
@@ -37,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        calendarView.setOnCalendarChangeListener(new OneCalendarView.OnCalendarChangeListener() {
+        calendarView.setOnCalendarChangeListener(new OnCalendarChangeListener() {
             @Override
             public void prevMonth() {
 
@@ -57,14 +59,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void initCalendar() {
         //el siguiente fragmento puede ser usado para capturar los swipes en el calendar
-        calendarView.setOnCalendarChangeListener(new OneCalendarView.OnCalendarChangeListener() {
+        calendarView.setOnCalendarChangeListener(new OnCalendarChangeListener() {
 
             /**
              * notifica al usuario que el calendario a cambiado al mes anterior
              */
             @Override
             public void prevMonth() {
-                Toast.makeText(MainActivity.this, calendarView.getStringMonth(calendarView.getMonth()) + " " + calendarView.getYear(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, calendarView.getStringMonth(calendarView.getMonthVisibleOnCalendar()) + " " + calendarView.getYearVisibleOnCalendar(), Toast.LENGTH_SHORT).show();
             }
 
             /**
@@ -72,14 +74,14 @@ public class MainActivity extends AppCompatActivity {
              */
             @Override
             public void nextMonth() {
-                Toast.makeText(MainActivity.this, calendarView.getStringMonth(calendarView.getMonth()) + " " + calendarView.getYear(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, calendarView.getStringMonth(calendarView.getMonthVisibleOnCalendar()) + " " + calendarView.getYearVisibleOnCalendar(), Toast.LENGTH_SHORT).show();
             }
         });
 
 
         //el siguiente fragmento de codigo muestra como obtener los datos de un dia en el calendario
         //ademas de realizar otras acciones
-        calendarView.setOneCalendarClickListener(new OneCalendarView.OneCalendarClickListener() {
+        calendarView.setOneCalendarClickListener(new OneCalendarClickListener() {
 
             /**
              * cuando se da click en un dia en el calendario mostrado

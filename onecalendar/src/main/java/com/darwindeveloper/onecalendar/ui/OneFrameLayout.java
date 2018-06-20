@@ -1,4 +1,4 @@
-package com.darwindeveloper.onecalendar.views;
+package com.darwindeveloper.onecalendar.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -11,14 +11,6 @@ import android.widget.FrameLayout;
  */
 
 public class OneFrameLayout extends FrameLayout {
-    public OneFrameLayout(Context context) {
-        super(context);
-    }
-
-    public OneFrameLayout(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-
 
     private static final int mWidth = 500;
     private float mDisplacementX;
@@ -26,6 +18,15 @@ public class OneFrameLayout extends FrameLayout {
     private float mDisplacementY;
     private float mInitialTx;
     private boolean mTracking;
+    private OnSwipeListener onSwipeListener;
+
+    public OneFrameLayout(Context context) {
+        super(context);
+    }
+
+    public OneFrameLayout(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -93,17 +94,13 @@ public class OneFrameLayout extends FrameLayout {
         return false;
     }
 
+    public void setOnSwipeListener(OnSwipeListener onSwipeListener) {
+        this.onSwipeListener = onSwipeListener;
+    }
 
     public interface OnSwipeListener {
         void rightSwipe();
 
         void leftSwipe();
-    }
-
-
-    private OnSwipeListener onSwipeListener;
-
-    public void setOnSwipeListener(OnSwipeListener onSwipeListener) {
-        this.onSwipeListener = onSwipeListener;
     }
 }

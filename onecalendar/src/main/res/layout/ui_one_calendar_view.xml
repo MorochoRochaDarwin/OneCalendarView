@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainContent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#0239a9"
     android:orientation="vertical">
-
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -40,6 +40,7 @@
                     android:layout_height="1dp"
                     android:layout_centerInParent="true"
                     android:background="#fff" />
+
                 <android.support.v7.widget.CardView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -55,10 +56,10 @@
                         android:id="@+id/textViewMY"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingTop="3dp"
                         android:paddingBottom="3dp"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
+                        android:paddingTop="3dp"
                         android:text="MARZO 2017"
                         android:textColor="#0266b7"
                         android:textStyle="bold" />
@@ -76,13 +77,11 @@
 
         </LinearLayout>
 
-
-
         <LinearLayout
-            android:layout_marginTop="-10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/layout_currentday"
+            android:layout_marginTop="-10dp"
             android:orientation="horizontal">
 
             <TextView
@@ -91,8 +90,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="D"
-                android:textColor="#fff" />
+                tools:text="D"
+                tools:textColor="#fff" />
 
             <TextView
                 android:id="@+id/textViewL"
@@ -100,8 +99,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="L"
-                android:textColor="#fff" />
+                tools:text="L"
+                tools:textColor="#fff" />
 
             <TextView
                 android:id="@+id/textViewM"
@@ -109,8 +108,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="M"
-                android:textColor="#fff" />
+                tools:text="M"
+                tools:textColor="#fff" />
 
 
             <TextView
@@ -119,8 +118,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="X"
-                android:textColor="#fff" />
+                tools:text="X"
+                tools:textColor="#fff" />
 
 
             <TextView
@@ -129,8 +128,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="J"
-                android:textColor="#fff" />
+                tools:text="J"
+                tools:textColor="#fff" />
 
 
             <TextView
@@ -139,8 +138,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="V"
-                android:textColor="#fff" />
+                tools:text="V"
+                tools:textColor="#fff" />
 
             <TextView
                 android:id="@+id/textViewS"
@@ -148,20 +147,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="S"
-                android:textColor="#fff" />
+                tools:text="S"
+                tools:textColor="#fff" />
 
         </LinearLayout>
 
-
-
     </RelativeLayout>
 
-    <com.darwindeveloper.onecalendar.views.OneFrameLayout
+    <com.darwindeveloper.onecalendar.ui.OneFrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#f1f1f1" />
-
 
 </LinearLayout>

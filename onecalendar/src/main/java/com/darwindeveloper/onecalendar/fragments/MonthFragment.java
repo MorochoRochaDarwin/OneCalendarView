@@ -1,8 +1,8 @@
 package com.darwindeveloper.onecalendar.fragments;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -12,9 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.darwindeveloper.onecalendar.R;
-import com.darwindeveloper.onecalendar.clases.CalendarAdapter;
-import com.darwindeveloper.onecalendar.clases.Day;
-
+import com.darwindeveloper.onecalendar.domain.OnClickDayListener;
+import com.darwindeveloper.onecalendar.domain.OnDayClickListener;
+import com.darwindeveloper.onecalendar.domain.OnSwipeListener;
+import com.darwindeveloper.onecalendar.list.AdapterCalendar;
+import com.darwindeveloper.onecalendar.model.Day;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,7 +29,7 @@ import java.util.Locale;
  * Created by DARWIN on 3/3/2017.
  */
 
-public class MonthFragment extends Fragment implements CalendarAdapter.DayOnClickListener {
+public class MonthFragment extends Fragment implements OnClickDayListener {
 
     public static final String MONTH = "com.darwindeveloper.onecalendar.monthfragemnt.month";
     public static final String YEAR = "com.darwindeveloper.onecalendar.monthfragemnt.year";
@@ -43,10 +45,11 @@ public class MonthFragment extends Fragment implements CalendarAdapter.DayOnClic
     private Context context;
     private View rootView;
     private RecyclerView recyclerViewDays;
-    private CalendarAdapter calendarAdapter;
+    private AdapterCalendar adapterCalendar;
     private ArrayList<Day> days = new ArrayList<>();
     private int imonth, iyear, currentDay, backgroundColorDays, backgroundColorDaysNV, backgroundColorCurrentDay, textColorCurrentDayDay, textColorDays, textColorDaysNV;
-
+    private OnSwipeListener onSwipeListener;
+    private OnDayClickListener onDayClickListener;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,28 +69,21 @@ public class MonthFragment extends Fragment implements CalendarAdapter.DayOnClic
 
     }
 
-
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_month, container, false);
-        recyclerViewDays = (RecyclerView) rootView.findViewById(R.id.recyclerView);
+        recyclerViewDays = rootView.findViewById(R.id.recyclerView);
         recyclerViewDays.setLayoutManager(new GridLayoutManager(context, 7));
-
 
         int month = getArguments().getInt(MONTH);
         int year = getArguments().getInt(YEAR);
 
         fillUpMonth(month, year);
 
-        calendarAdapter = new CalendarAdapter(context, days, getArguments().getInt(TCSDAY), getArguments().getInt(BCSDAY));
-        calendarAdapter.setDayOnClickListener(this);
-
-
-        recyclerViewDays.setAdapter(calendarAdapter);
-
-
-
+        adapterCalendar = new AdapterCalendar(context, days, getArguments().getInt(TCSDAY), getArguments().getInt(BCSDAY));
+        adapterCalendar.setOnClickDayListener(this);
+        recyclerViewDays.setAdapter(adapterCalendar);
 
         return rootView;
     }
@@ -95,7 +91,6 @@ public class MonthFragment extends Fragment implements CalendarAdapter.DayOnClic
     private void fillUpMonth(int month, int year) {
         //almaceno el nombre del primer  dia del mes y año en cuestion
         String nameFirstDay = getNameDay(1, month, year);
-
 
         int blankSpaces = 0;
         switch (nameFirstDay) {
@@ -132,17 +127,15 @@ public class MonthFragment extends Fragment implements CalendarAdapter.DayOnClic
             }
 
             int numdays = getNumberOfDaysMonthYear(tyear, tmonth);
-
             for (int i = numdays - blankSpaces + 1; i <= numdays; i++) {
-                days.add(new Day(new Date(tyear, tmonth, i), false, textColorDaysNV, backgroundColorDaysNV));
+                Date date = new Date(tyear, tmonth, i);
+                days.add(new Day(date, false, textColorDaysNV, backgroundColorDaysNV));
                 squares++;
             }
         }
 
-
         int numberOfDaysMonthYear = getNumberOfDaysMonthYear(year, month);
         for (int i = 1; i <= numberOfDaysMonthYear; i++) {
-
             if (this.iyear == year && this.imonth == month && this.currentDay == i) {
                 days.add(new Day(new Date(year, month, i), textColorCurrentDayDay, backgroundColorCurrentDay));
             } else {
@@ -171,9 +164,7 @@ public class MonthFragment extends Fragment implements CalendarAdapter.DayOnClic
                 }
             }
         }
-
     }
-
 
     /**
      * retorna el mes actual iniciando desde 0=enero
@@ -183,7 +174,6 @@ public class MonthFragment extends Fragment implements CalendarAdapter.DayOnClic
     public int getCurrentMonth() {
         return Calendar.getInstance().get(Calendar.MONTH);
     }
-
 
     /**
      * retorna el año actual
@@ -214,7 +204,6 @@ public class MonthFragment extends Fragment implements CalendarAdapter.DayOnClic
         Calendar mycal = new GregorianCalendar(year, month, 1);
         return mycal.getActualMaximum(Calendar.DAY_OF_MONTH);
     }
-
 
     /**
      * nos retorna el nombre de un dia especifico de una año (en ingles o español segun la configuracion)
@@ -252,50 +241,16 @@ public class MonthFragment extends Fragment implements CalendarAdapter.DayOnClic
      */
     @Override
     public void dayOnLongClik(Day day, int position) {
-
         onDayClickListener.dayOnLongClik(day, position);
     }
-
-    public interface OnSwipeListener {
-        void rightSwipe();
-
-        void leftSwipe();
-    }
-
-
-    private OnSwipeListener onSwipeListener;
 
     public void setOnSwipeListener(OnSwipeListener onSwipeListener) {
         this.onSwipeListener = onSwipeListener;
     }
 
-
-    public interface OnDayClickListener {
-        /**
-         * un objeto de tipo day para obtener la fecha (año,mes,dia) con un objeto calendar
-         * <p>
-         * otros metodos como setBackgroundColor(int backgroundColor) y getBackgroundColor() color del fondo del numero de dia del mes
-         * setTextColor(int textColor) y getTextColor() color del texto numero de dia del mes
-         *
-         * @param day
-         */
-        void dayOnClick(Day day, int position);
-
-        /**
-         * similar a dayOnClick solo que este se ejecuta cuando haya un clic prolongado
-         *
-         * @param day
-         */
-        void dayOnLongClik(Day day, int position);
-    }
-
-
-    private OnDayClickListener onDayClickListener;
-
     public void setOnDayClickListener(OnDayClickListener onDayClickListener) {
         this.onDayClickListener = onDayClickListener;
     }
-
 
     public void setItemSelected(int position) {
         days.get(position).setSelected(true);
@@ -303,10 +258,9 @@ public class MonthFragment extends Fragment implements CalendarAdapter.DayOnClic
             if (i != position)
                 days.get(i).setSelected(false);
         }
-        calendarAdapter.notifyItemChanged(0, 41);
-        calendarAdapter.notifyDataSetChanged();
+        adapterCalendar.notifyItemChanged(0, 41);
+        adapterCalendar.notifyDataSetChanged();
     }
-
 
     /**
      * marca un dia en el calendario como seleccionado
@@ -315,10 +269,9 @@ public class MonthFragment extends Fragment implements CalendarAdapter.DayOnClic
      */
     public void addItemSelected(int position) {
         days.get(position).setSelected(true);
-        calendarAdapter.notifyItemChanged(position);
-        calendarAdapter.notifyDataSetChanged();
+        adapterCalendar.notifyItemChanged(position);
+        adapterCalendar.notifyDataSetChanged();
     }
-
 
     /**
      * remueve un dia en el calendario como seleccionado
@@ -327,12 +280,12 @@ public class MonthFragment extends Fragment implements CalendarAdapter.DayOnClic
      */
     public void removeItemSelected(int position) {
         days.get(position).setSelected(false);
-        calendarAdapter.notifyItemChanged(position);
-        calendarAdapter.notifyDataSetChanged();
+        adapterCalendar.notifyItemChanged(position);
+        adapterCalendar.notifyDataSetChanged();
     }
-
 
     public ArrayList<Day> getDays() {
         return days;
     }
+
 }

@@ -8,21 +8,20 @@
     android:orientation="vertical"
     tools:context="com.darwindeveloper.onecalendarview.MainActivity">
 
-    <com.darwindeveloper.onecalendar.views.OneCalendarView
+    <com.darwindeveloper.onecalendar.ui.OneCalendarView
         android:id="@+id/oneCalendar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:backgroundColorDaysOfAnotherMonth="@color/colorPrimary"
         app:backgroundColorDaysOfMonth="#53c0c0c1"
+        app:backgroundColorSelectedDay="#d2d2d2"
         app:calendarBackgroundColor="@color/colorPrimary"
-        app:calendarLanguage="EN"
         app:currentDayBackgroundColor="#fad501"
         app:mainBackgroundColor="@color/colorPrimary"
         app:textColorDaysOfAnotherMonth="#fff"
         app:textColorDaysOfMonth="#fff"
         app:textColorMonthAndYear="@color/colorPrimary"
-        app:backgroundColorSelectedDay="#d2d2d2"
-        app:textColorSelectedDay="#000000"/>
+        app:textColorSelectedDay="#000000" />
 
 
 </LinearLayout>

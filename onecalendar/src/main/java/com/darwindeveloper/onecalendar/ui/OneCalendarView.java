@@ -1,5 +1,6 @@
-package com.darwindeveloper.onecalendar.views;
+package com.darwindeveloper.onecalendar.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
@@ -7,19 +8,19 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.darwindeveloper.onecalendar.R;
-import com.darwindeveloper.onecalendar.clases.Day;
+import com.darwindeveloper.onecalendar.domain.OnCalendarChangeListener;
+import com.darwindeveloper.onecalendar.domain.OnDayClickListener;
+import com.darwindeveloper.onecalendar.domain.OneCalendarClickListener;
 import com.darwindeveloper.onecalendar.fragments.MonthFragment;
+import com.darwindeveloper.onecalendar.model.Day;
 
+import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -32,36 +33,14 @@ import java.util.Locale;
 
 public class OneCalendarView extends LinearLayout {
 
+    private static final Calendar calendarForComputeData = Calendar.getInstance(Locale.getDefault());
+    private static final DateFormatSymbols dfs = new DateFormatSymbols();
+    private static final String[] months = dfs.getShortMonths();
+
     AppCompatActivity mActivity;
     MonthFragment fragment;
 
-    private LinearLayout mainContent;
-    private OneFrameLayout fragment_container;
-
-    private ImageButton buttonUp, buttonDown;
-    private TextView textViewMY;
-    private TextView textViewD, textViewL, textViewM, textViewX, textViewJ, textViewV, textViewS;
-
-    public static final int SPANISH = 0, ENGLISH = 1;//si el calendario estara en español o ingles
-
-
-    private int iday, imonth, iyear, month, year;
-    //meses por defecto en español
-    private String enero = "Enero";
-    private String febrero = "Febrero";
-    private String marzo = "Marzo";
-    private String abril = "Abril";
-    private String mayo = "Mayo";
-    private String junio = "Junio";
-    private String julio = "Julio";
-    private String agosto = "Agosto";
-    private String septiembre = "Septiembre";
-    private String octubre = "Octubre";
-    private String noviembre = "Noviembre";
-    private String diciembre = "Deciembre";
-
-
-    //para el estilo del calendar
+    // Colors
     int mainBackgroundColor = Color.parseColor("#0239a9");
     int calendarBackgroundColor = Color.parseColor("#FFF5F5F5");
     int currentDayBackgroundColor = Color.parseColor("#0099cc");
@@ -70,10 +49,29 @@ public class OneCalendarView extends LinearLayout {
     int textColorDaysOfMonth = Color.parseColor("#0099cc");
     int textColorDaysOfAnotherMonth = Color.parseColor("#d2d2d2");
     int textColorMonthAndYear = Color.parseColor("#0099cc");
+    int textColorWeek = Color.parseColor("#0099cc");
     int textColorSelectedDay = Color.parseColor("#000000");
     int textColorCurrentDayDay = Color.parseColor("#000000");
     int backgroundColorSelectedDay = Color.parseColor("#d2d2d2");
-    int calendarLanguage = 0;
+
+    // Views
+    private LinearLayout linearLayout;
+    private OneFrameLayout oneFrameLayout;
+    private TextView textViewMY;
+    private TextView textViewD;
+    private TextView textViewL;
+    private TextView textViewM;
+    private TextView textViewX;
+    private TextView textViewJ;
+    private TextView textViewV;
+    private TextView textViewS;
+
+    private int monthVisibleOnCalendar;
+    private int yearVisibleOnCalendar;
+
+    // Listeners
+    private OnCalendarChangeListener onCalendarChangeListener;
+    private OneCalendarClickListener oneCalendarClickListener;
 
     public OneCalendarView(Context context) {
         super(context);
@@ -127,6 +125,11 @@ public class OneCalendarView extends LinearLayout {
         }
 
         try {
+            textColorWeek = Color.parseColor(a.getString(R.styleable.OneCalendarView_textColorWeek));
+        } catch (NullPointerException e) {
+        }
+
+        try {
             textColorSelectedDay = Color.parseColor(a.getString(R.styleable.OneCalendarView_textColorSelectedDay));
         } catch (NullPointerException e) {
         }
@@ -141,49 +144,42 @@ public class OneCalendarView extends LinearLayout {
         } catch (NullPointerException e) {
         }
 
-        calendarLanguage = a.getInt(R.styleable.OneCalendarView_calendarLanguage, 0);
-
         a.recycle();
 
-
-        LayoutInflater inflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.one_calendar_view, this, true);
-
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        inflater.inflate(R.layout.ui_one_calendar_view, this, true);
     }
 
-
     private void init() {
-        imonth = getCurrentMonth();
-        iyear = getCurrentYear();
-        iday = getCurrentDayMonth();
-
-        month = imonth;
-        year = iyear;
+        yearVisibleOnCalendar = getCurrentYear();
+        monthVisibleOnCalendar = getCurrentMonth();
 
         //inicializamos las vistas
-        mainContent = (LinearLayout) findViewById(R.id.mainContent);
-        fragment_container = (OneFrameLayout) findViewById(R.id.fragment_container);
-        buttonDown = (ImageButton) findViewById(R.id.imageButtonDown);
-        buttonUp = (ImageButton) findViewById(R.id.imageButtonUp);
-        textViewMY = (TextView) findViewById(R.id.textViewMY);
+        linearLayout = findViewById(R.id.mainContent);
+        oneFrameLayout = findViewById(R.id.fragment_container);
+        textViewMY = findViewById(R.id.textViewMY);
 
-        textViewD = (TextView) findViewById(R.id.textViewD);
-        textViewL = (TextView) findViewById(R.id.textViewL);
-        textViewM = (TextView) findViewById(R.id.textViewM);
-        textViewX = (TextView) findViewById(R.id.textViewX);
-        textViewJ = (TextView) findViewById(R.id.textViewJ);
-        textViewV = (TextView) findViewById(R.id.textViewV);
-        textViewS = (TextView) findViewById(R.id.textViewS);
+        textViewD = findViewById(R.id.textViewD);
+        textViewL = findViewById(R.id.textViewL);
+        textViewM = findViewById(R.id.textViewM);
+        textViewX = findViewById(R.id.textViewX);
+        textViewJ = findViewById(R.id.textViewJ);
+        textViewV = findViewById(R.id.textViewV);
+        textViewS = findViewById(R.id.textViewS);
 
+        textViewD.setTextColor(textColorWeek);
+        textViewL.setTextColor(textColorWeek);
+        textViewM.setTextColor(textColorWeek);
+        textViewX.setTextColor(textColorWeek);
+        textViewJ.setTextColor(textColorWeek);
+        textViewV.setTextColor(textColorWeek);
+        textViewS.setTextColor(textColorWeek);
 
         textViewMY.setTextColor(textColorMonthAndYear);
 
-        setLanguage(calendarLanguage);
+        setLanguage();
 
-
-        fragment_container.setOnSwipeListener(new OneFrameLayout.OnSwipeListener() {
-
+        oneFrameLayout.setOnSwipeListener(new OneFrameLayout.OnSwipeListener() {
             @Override
             public void rightSwipe() {
                 prevMonth();
@@ -198,7 +194,7 @@ public class OneCalendarView extends LinearLayout {
         });
 
 
-        buttonDown.setOnClickListener(new OnClickListener() {
+        (findViewById(R.id.imageButtonDown)).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 prevMonth();
@@ -206,7 +202,7 @@ public class OneCalendarView extends LinearLayout {
             }
         });
 
-        buttonUp.setOnClickListener(new OnClickListener() {
+        (findViewById(R.id.imageButtonUp)).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 nextMoth();
@@ -216,25 +212,26 @@ public class OneCalendarView extends LinearLayout {
 
     }
 
+
+    //MIS METODOS
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
         init();
 
+        linearLayout.setBackgroundColor(mainBackgroundColor);
+        oneFrameLayout.setBackgroundColor(calendarBackgroundColor);
 
-        mainContent.setBackgroundColor(mainBackgroundColor);
-        fragment_container.setBackgroundColor(calendarBackgroundColor);
-
-
-        showMonth(month, year);
-
-
+        showMonth();
     }
 
+    private void showMonth() {
+        showMonth(monthVisibleOnCalendar, yearVisibleOnCalendar);
+    }
 
+    @SuppressLint("DefaultLocale")
     private void showMonth(final int month, int year) {
-
-        textViewMY.setText(getStringMonth(month) + " " + year);
+        textViewMY.setText(String.format("%s %d", getStringMonth(month), year));
 
         fragment = new MonthFragment();
 
@@ -251,8 +248,7 @@ public class OneCalendarView extends LinearLayout {
         bundle.putInt(MonthFragment.BCSDAY, backgroundColorSelectedDay);
         fragment.setArguments(bundle);
 
-
-        fragment.setOnDayClickListener(new MonthFragment.OnDayClickListener() {
+        fragment.setOnDayClickListener(new OnDayClickListener() {
 
             /**
              * un objeto de tipo day para obtener la fecha (año,mes,dia) con un objeto calendar
@@ -283,19 +279,14 @@ public class OneCalendarView extends LinearLayout {
 
         FragmentTransaction transaction = mActivity.getSupportFragmentManager().beginTransaction();
 
-// Replace whatever is in the fragment_container view with this fragment,
-// and add the transaction to the back stack so the user can navigate back
+        // Replace whatever is in the oneFrameLayout view with this fragment,
+        // and add the transaction to the back stack so the user can navigate back
         transaction.replace(R.id.fragment_container, fragment);
         //transaction.addToBackStack(null);
 
-// Commit the transaction
+        // Commit the transaction
         transaction.commit();
-
     }
-
-
-    //MIS METODOS
-
 
     /**
      * este metodo configura el calendar a un mes y un año especifico
@@ -307,134 +298,16 @@ public class OneCalendarView extends LinearLayout {
         showMonth(month, year);
     }
 
-
-    /**
-     * permite cambiar el lenguaje de como se visualizan los meses y dias del calendario
-     *
-     * @param language SPANISH=0, ENGLISH=1;
-     */
-    public void setLanguage(int language) {
-        if (language == 1) {//si el idioma es el ingles
-            textViewL.setText("M");
-            textViewM.setText("T");
-            textViewX.setText("W");
-            textViewJ.setText("T");
-            textViewV.setText("F");
-            textViewS.setText("S");
-            textViewD.setText("S");
-
-            enero = "January";
-            febrero = "February";
-            marzo = "March";
-            abril = "April";
-            mayo = "May";
-            junio = "June";
-            julio = "July";
-            agosto = "August";
-            septiembre = "September";
-            octubre = "October";
-            noviembre = "November";
-            diciembre = "December";
-
-        } if (language == 2) {//si el idioma es el ingles
-        textViewL.setText("S");
-        textViewM.setText("T");
-        textViewX.setText("Q");
-        textViewJ.setText("Q");
-        textViewV.setText("S");
-        textViewS.setText("S");
-        textViewD.setText("D");
-
-        enero = "Janeiro";
-        febrero = "Fevereiro";
-        marzo = "Março";
-        abril = "Abril";
-        mayo = "Maio";
-        junio = "Junho";
-        julio = "Julho";
-        agosto = "Agosto";
-        septiembre = "Setembro";
-        octubre = "Outubro";
-        noviembre = "Novembro";
-        diciembre = "Dezembro";
-
-    } else {
-
-            textViewL.setText("L");
-            textViewM.setText("M");
-            textViewX.setText("X");
-            textViewJ.setText("J");
-            textViewV.setText("V");
-            textViewS.setText("S");
-            textViewD.setText("D");
-
-            enero = "Enero";
-            febrero = "Febrero";
-            marzo = "Marzo";
-            abril = "Abril";
-            mayo = "Mayo";
-            junio = "Junio";
-            julio = "Julio";
-            agosto = "Agosto";
-            septiembre = "Septiembre";
-            octubre = "Octubre";
-            noviembre = "Noviembre";
-            diciembre = "Deciembre";
-        }
-
-        textViewMY.setText(getStringMonth(month) + " " + year);
-
-
+    @SuppressLint("DefaultLocale")
+    public void setLanguage() {
+        textViewL.setText(getInitialWeekday(Calendar.MONDAY));
+        textViewM.setText(getInitialWeekday(Calendar.TUESDAY));
+        textViewX.setText(getInitialWeekday(Calendar.WEDNESDAY));
+        textViewJ.setText(getInitialWeekday(Calendar.THURSDAY));
+        textViewV.setText(getInitialWeekday(Calendar.FRIDAY));
+        textViewS.setText(getInitialWeekday(Calendar.SATURDAY));
+        textViewD.setText(getInitialWeekday(Calendar.SUNDAY));
     }
-
-    /**
-     * retorna un mes como un string de pendiendo del idioma establecido en el OneCalendar
-     *
-     * @param numMonth numero del mes iniciando desde 0,1,2...
-     * @return mes en texto segun el idioma elegido
-     */
-    public String getStringMonth(int numMonth) {
-        switch (numMonth) {
-            case 0:
-                return enero;
-
-            case 1:
-                return febrero;
-
-            case 2:
-                return marzo;
-
-            case 3:
-                return abril;
-
-            case 4:
-                return mayo;
-
-            case 5:
-                return junio;
-
-            case 6:
-                return julio;
-
-            case 7:
-                return agosto;
-
-            case 8:
-                return septiembre;
-
-            case 9:
-                return octubre;
-
-            case 10:
-                return noviembre;
-
-            case 11:
-                return diciembre;
-
-        }
-        return enero;
-    }
-
 
     /**
      * retorna el mes actual iniciando desde 0=enero
@@ -444,7 +317,6 @@ public class OneCalendarView extends LinearLayout {
     public int getCurrentMonth() {
         return Calendar.getInstance().get(Calendar.MONTH);
     }
-
 
     /**
      * retorna el año actual
@@ -476,7 +348,6 @@ public class OneCalendarView extends LinearLayout {
         return mycal.getActualMaximum(Calendar.DAY_OF_MONTH);
     }
 
-
     /**
      * nos retorna el nombre de un dia especifico de una año (en ingles o español segun la configuracion)
      *
@@ -492,86 +363,33 @@ public class OneCalendarView extends LinearLayout {
     }
 
     private void nextMoth() {
-        if (month == 11) {
-            month = 0;
-            year++;
+        if (monthVisibleOnCalendar == 11) {
+            monthVisibleOnCalendar = 0;
+            yearVisibleOnCalendar++;
         } else {
-            month++;
+            monthVisibleOnCalendar++;
         }
-        showMonth(month, year);
+        showMonth();
     }
 
     private void prevMonth() {
-        if (month == 0) {
-            month = 11;
-            year--;
+        if (monthVisibleOnCalendar == 0) {
+            monthVisibleOnCalendar = 11;
+            yearVisibleOnCalendar--;
         } else {
-            month--;
+            monthVisibleOnCalendar--;
         }
 
-        showMonth(month, year);
+        showMonth();
     }
-
-
-    public interface OnCalendarChangeListener {
-        /**
-         * notifica al usuario que el calendario a cambiado al mes anterior
-         */
-        void prevMonth();
-
-        /**
-         * notifica al usuario que el calendario a cambiado al mes siguiente
-         */
-        void nextMonth();
-    }
-
-
-    private OnCalendarChangeListener onCalendarChangeListener;
 
     public void setOnCalendarChangeListener(OnCalendarChangeListener onCalendarChangeListener) {
         this.onCalendarChangeListener = onCalendarChangeListener;
     }
 
-    public interface OneCalendarClickListener {
-        /**
-         * cuando se da click en un dia en el calendario mostrado
-         *
-         * @param day      un Objeto de tipo Day del cual podemos llara a su metodo getDate() para recuperar una fecha
-         * @param position posicion desde 0-41, que ocupa en el calendario actual
-         */
-        void dateOnClick(Day day, int position);
-
-        /**
-         * cuando se da click prolongado en un dia en el calendario mostrado
-         *
-         * @param day      un Objeto de tipo Day del cual podemos llara a su metodo getDate() para recuperar una fecha
-         * @param position posicion desde 0-41, que ocupa en el calendario actual
-         */
-        void dateOnLongClick(Day day, int position);
-    }
-
-    private OneCalendarClickListener oneCalendarClickListener;
-
     public void setOneCalendarClickListener(OneCalendarClickListener oneCalendarClickListener) {
         this.oneCalendarClickListener = oneCalendarClickListener;
     }
-
-    /**
-     * retorna el mes visible en el calendario
-     * @return
-     */
-    public int getMonth() {
-        return month;
-    }
-
-    /**
-     * retorna el año del mes visible en el calendario
-     * @return
-     */
-    public int getYear() {
-        return year;
-    }
-
 
     /**
      * este metodo pinta un dia en el calendario actual como seleccionado
@@ -591,7 +409,6 @@ public class OneCalendarView extends LinearLayout {
         fragment.removeItemSelected(position);
     }
 
-
     /**
      * comprueba si un dia en el calendario actual esta seleccionado
      *
@@ -602,5 +419,22 @@ public class OneCalendarView extends LinearLayout {
         return fragment.getDays().get(position).isSelected();
     }
 
+    private String getInitialWeekday(int weekday) {
+        calendarForComputeData.set(Calendar.DAY_OF_WEEK, weekday);
+        String dayOfWeek = calendarForComputeData.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault());
+        return dayOfWeek.substring(0, 1);
+    }
 
+    public String getStringMonth(int month) {
+        calendarForComputeData.set(Calendar.MONTH, month);
+        return months[calendarForComputeData.get(Calendar.MONTH)];
+    }
+
+    public int getMonthVisibleOnCalendar() {
+        return monthVisibleOnCalendar;
+    }
+
+    public int getYearVisibleOnCalendar() {
+        return yearVisibleOnCalendar;
+    }
 }

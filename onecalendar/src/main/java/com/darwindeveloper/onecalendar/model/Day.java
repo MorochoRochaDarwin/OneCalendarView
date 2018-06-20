@@ -1,4 +1,4 @@
-package com.darwindeveloper.onecalendar.clases;
+package com.darwindeveloper.onecalendar.model;
 
 import android.graphics.Color;
 
@@ -9,6 +9,7 @@ import java.util.Date;
  */
 
 public class Day {
+
     private Date date;
     private boolean valid, selected;
     private int textColor = Color.parseColor("#0099cc");
